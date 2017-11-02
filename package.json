@@ -1,0 +1,33 @@
+{
+  "name": "todo-pouchdb",
+  "version": "0.0.1",
+  "description": "simple todo list with pouchdb",
+  "main": "src/index.js",
+  "author": "Maxim Topciu",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon src/index.js --exec babel-node",
+    "build": "webpack"
+  },
+  "dependencies": {
+    "koa": "2.3.0",
+    "koa-static": "4.0.1",
+    "pouchdb": "6.3.4"
+  },
+  "engines": {
+    "node": "8"
+  },
+  "devDependencies": {
+    "babel-cli": "6.26.0",
+    "babel-eslint": "8.0.1",
+    "babel-loader": "7.1.2",
+    "babel-preset-env": "1.6.1",
+    "babel-preset-stage-0": "6.24.1",
+    "eslint": "4.10.0",
+    "eslint-config-airbnb-base": "12.1.0",
+    "eslint-plugin-import": "2.8.0",
+    "nodemon": "1.12.1",
+    "uglifyjs-webpack-plugin": "1.0.1",
+    "webpack": "3.8.1"
+  }
+}
