@@ -2,6 +2,7 @@
   "name": "todo-pouchdb",
   "version": "0.0.1",
   "description": "simple todo list with pouchdb",
+  "repository": "https://github.com/maximtop/pouchdb-todo-list",
   "main": "src/index.js",
   "author": "Maxim Topciu",
   "license": "MIT",

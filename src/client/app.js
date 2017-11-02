@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define,no-underscore-dangle,no-param-reassign,no-console */
 import PouchDB from 'pouchdb';
 
 
@@ -5,10 +6,10 @@ const ENTER_KEY = 13;
 const newTodoDom = document.getElementById('new-todo');
 const syncDom = document.getElementById('sync-wrapper');
 
-// EDITING STARTS HERE (you dont need to edit anything above this line)
+// EDITING STARTS HERE (you don't need to edit anything above this line)
 
-var db = new PouchDB('todos');
-var remoteCouch = false;
+const db = new PouchDB('todos');
+const remoteCouch = 'http://admin:123@127.0.0.1:5984/todos';
 
 db.changes({
   since: 'now',
@@ -22,7 +23,7 @@ function addTodo(text) {
     title: text,
     completed: false,
   };
-  db.put(todo, (err, result) => {
+  db.put(todo, (err) => {
     if (!err) {
       console.log('Successfully posted a todo!');
     }
@@ -43,7 +44,6 @@ function checkboxChanged(todo, event) {
 
 // User pressed the delete button for a todo, delete it
 function deleteButtonPressed(todo) {
-  console.log(todo);
   db.remove(todo);
 }
 
@@ -59,21 +59,17 @@ function todoBlurred(todo, event) {
   }
 }
 
+// There was some form or error syncing
+function syncError() {
+  syncDom.setAttribute('data-sync-state', 'error');
+}
+
 // Initialise a sync with the remote server
 function sync() {
   syncDom.setAttribute('data-sync-state', 'syncing');
   const opts = { live: true };
   db.replicate.to(remoteCouch, opts, syncError);
   db.replicate.from(remoteCouch, opts, syncError);
-}
-
-// EDITING STARTS HERE (you dont need to edit anything below this line)
-var db = new PouchDB('todos');
-var remoteCouch = 'http://admin:123@127.0.0.1:5984/todos';
-
-// There was some form or error syncing
-function syncError() {
-  syncDom.setAttribute('data-sync-state', 'error');
 }
 
 // User has double clicked a todo, display an input so they can edit the title
