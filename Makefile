@@ -7,3 +7,6 @@ serve:
 
 start:
 	npm start
+
+install:
+	npm install

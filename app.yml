@@ -1,0 +1,83 @@
+- hosts: scaleway
+
+  vars:
+    - homeDir: /home/todo-pouchdb
+    - appDir: app
+    - repository: git@github.com:maximtop/pouchdb-todo-list.git
+
+  tasks:
+    - name: Ensure the system can use the HTTPS transport for APT
+      stat:
+        path: /usr/lib/apt/methods/https
+      register: apt_https_transport
+
+    - name: Install HTTPS transport for APT
+      apt:
+        pkg: apt-transport-https
+        state: installed
+      when: not apt_https_transport.stat.exists
+
+    - name: Install Packages
+      apt: name={{ item }} update_cache=yes state=latest
+      become: true
+      with_items:
+        - build-essential
+        - libssl-dev
+        - git
+        - curl
+        - nginx
+
+    - name: Configure site
+      template: src=default.j2 dest=/etc/nginx/sites-available/default
+
+    - name: Starting NGINX
+      service:
+        name: nginx
+        state: reloaded
+
+    - name: add apt key for nodesource
+      apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
+
+    - name: add repo for nodesource
+      apt_repository:
+            repo: 'deb https://deb.nodesource.com/node_8.x {{ ansible_distribution_release }} main'
+            update_cache: yes
+            state: present
+
+    - name: Install Node.js
+      apt:
+        pkg:
+          - nodejs
+        state: installed
+        update_cache: yes
+
+    - name: Install pm2
+      npm:
+        name: pm2
+        global: yes
+        production: yes
+        state: present
+
+    - name: Clone git repository
+      git: repo={{ repository }} dest={{ homeDir }}/{{ appDir }} update=yes force=yes accept_hostkey=yes
+      register: git_finished
+
+    - name: Run make install
+      make:
+        chdir: "{{homeDir}}/{{appDir}}"
+        target: install
+
+    - name: Run make build
+      make:
+        chdir: "{{homeDir}}/{{appDir}}"
+        target: build
+
+    - name: Stop APP
+      command: pm2 stop app chdir={{homeDir}}/{{appDir}}
+      become: true
+      ignore_errors: yes
+
+    - name: Start APP
+      command: pm2 start dist/server/index.js --name app chdir={{homeDir}}/{{appDir}}
+      become: true
+      ignore_errors: yes
