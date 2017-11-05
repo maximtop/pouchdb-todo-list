@@ -11,7 +11,7 @@ const syncDom = document.getElementById('sync-wrapper');
 // EDITING STARTS HERE (you don't need to edit anything above this line)
 
 const db = new PouchDB('todos');
-const remoteCouch = 'http://admin:123@127.0.0.1:5984/todos';
+const remoteCouch = 'http://163.172.170.219:5984/todos';
 
 db.changes({
   since: 'now',
