@@ -7,8 +7,8 @@
   "author": "Maxim Topciu",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon src/index.js --exec babel-node",
-    "build": "webpack"
+    "start": "nodemon src/server/index.js --exec babel-node",
+    "build": "webpack && babel src --out-dir dist/ --copy-files --ignore client/"
   },
   "dependencies": {
     "koa": "2.3.0",
@@ -24,10 +24,14 @@
     "babel-loader": "7.1.2",
     "babel-preset-env": "1.6.1",
     "babel-preset-stage-0": "6.24.1",
+    "css-loader": "0.28.7",
     "eslint": "4.10.0",
     "eslint-config-airbnb-base": "12.1.0",
     "eslint-plugin-import": "2.8.0",
+    "file-loader": "1.1.5",
+    "html-webpack-plugin": "2.30.1",
     "nodemon": "1.12.1",
+    "style-loader": "0.19.0",
     "uglifyjs-webpack-plugin": "1.0.1",
     "webpack": "3.8.1"
   }

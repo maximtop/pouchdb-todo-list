@@ -1,5 +1,7 @@
 /* eslint-disable no-use-before-define,no-underscore-dangle,no-param-reassign,no-console */
 import PouchDB from 'pouchdb';
+import './style/base.css';
+import './style/bg.png';
 
 
 const ENTER_KEY = 13;
