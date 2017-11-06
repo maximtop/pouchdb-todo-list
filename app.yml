@@ -26,7 +26,6 @@
         - git
         - curl
         - nginx
-        - couchdb
 
     - name: Configure site
       template: src=default.j2 dest=/etc/nginx/sites-available/default
@@ -35,11 +34,6 @@
       service:
         name: nginx
         state: reloaded
-
-    - name: Starting CouchDB
-      service:
-        name: couchdb
-        state: started
 
     - name: add apt key for nodesource
       apt_key: url=https://deb.nodesource.com/gpgkey/nodesource.gpg.key state=present
@@ -64,20 +58,27 @@
         production: yes
         state: present
 
-    - name: Install CouchDB CORS
-      npm:
-        name: add-cors-to-couchdb
-        global: yes
-        production: yes
-        state: present
-
-    - name: Start CouchDB CORS
-      command: add-cors-to-couchdb
-      become: true
+#    - name: Install CouchDB CORS
+#      npm:
+#        name: add-cors-to-couchdb
+#        global: yes
+#        production: yes
+#        state: present
+#
+#    - name: Start CouchDB CORS
+#      command: add-cors-to-couchdb
+#      become: true
 
     - name: Clone git repository
       git: repo={{ repository }} dest={{ homeDir }}/{{ appDir }} update=yes force=yes accept_hostkey=yes
       register: git_finished
+    - name: Copy env with aws credentials
+          copy:
+            src: .env
+            dest: "{{ homeDir }}/{{ appDir }}/.env"
+            owner: root
+            group: root
+            mode: 0644
 
     - name: Run make install
       make:

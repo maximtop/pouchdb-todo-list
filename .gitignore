@@ -2,3 +2,4 @@
 /dist/
 /production.ini
 /app.retry
+/.env

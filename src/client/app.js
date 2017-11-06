@@ -3,7 +3,6 @@ import PouchDB from 'pouchdb';
 import './style/base.css';
 import './style/bg.png';
 
-
 const ENTER_KEY = 13;
 const newTodoDom = document.getElementById('new-todo');
 const syncDom = document.getElementById('sync-wrapper');
@@ -11,7 +10,7 @@ const syncDom = document.getElementById('sync-wrapper');
 // EDITING STARTS HERE (you don't need to edit anything above this line)
 
 const db = new PouchDB('todos');
-const remoteCouch = 'http://163.172.170.219:5984/todos';
+const remoteCouch = `http://${process.env.DB_LOGIN}:${process.env.DB_PASS}@95.85.26.56:5984/todos`;
 
 db.changes({
   since: 'now',
@@ -70,7 +69,9 @@ function syncError() {
 function sync() {
   syncDom.setAttribute('data-sync-state', 'syncing');
   const opts = { live: true };
-  db.replicate.to(remoteCouch, opts, syncError);
+  db.replicate.to(remoteCouch, opts, syncError).on('error', (err) => {
+    console.log(err);
+  });
   db.replicate.from(remoteCouch, opts, syncError);
 }
 

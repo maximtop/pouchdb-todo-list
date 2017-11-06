@@ -1,6 +1,7 @@
 import path from 'path';
 import UglifyJSPlugin from 'uglifyjs-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
+import Dotenv from 'dotenv-webpack';
 
 module.exports = {
   entry: './src/client/app.js',
@@ -37,5 +38,6 @@ module.exports = {
       template: 'src/client/index.html',
     }),
     new UglifyJSPlugin(),
+    new Dotenv(),
   ],
 };
